@@ -1206,7 +1206,11 @@ footer {
         text-align: center;
     }
     .about-badge {
-        order: -1;
+        order: 2;
+        margin-top: 2rem;
+    }
+    .about-badge img {
+        max-width: 220px;
     }
     .services-grid {
         grid-template-columns: 1fr;
