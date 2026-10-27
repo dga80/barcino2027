@@ -276,7 +276,7 @@ if($_POST)
     $mail->SMTPSecure = false;
     
     $mail->setFrom($your_email, "Barcino Meats"); 
-    $mail->addAddress($your_email);
+    $mail->addAddress('pedro@barcinomeats.co.uk');
     $mail->addReplyTo($your_email, 'Information');
 
 
