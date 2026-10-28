@@ -529,6 +529,13 @@ header {
     margin-top: 2rem;
 }
 
+.team-grid.single-member {
+    grid-template-columns: 360px;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .team-card {
     background: rgba(0, 0, 0, 0.2);
     border-radius: 8px;

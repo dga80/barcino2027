@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $mail = new PHPMailer(true);
-    $recipient = "contact@barcinomeats.co.uk"; // Destinatario oficial
+    $recipient = "pedro@barcinomeats.co.uk"; // Destinatario oficial
 
     try {
         // Configuración básica usando mail() o SMTP local del hosting
