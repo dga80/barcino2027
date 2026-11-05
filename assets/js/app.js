@@ -199,21 +199,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderNewsItems(newsItems) {
         if (!newsItems || newsItems.length === 0) {
-            newsGrid.classList.remove('single-news');
             newsGrid.innerHTML = `
-                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">
+                <div style="text-align: center; color: var(--text-muted); padding: 2rem; width: 100%;">
                     <p>No recent news articles published yet. Upload your text and photo to the /noticias folder.</p>
                 </div>
             `;
             return;
         }
 
-        newsGrid.classList.toggle('single-news', newsItems.length === 1);
-
         newsGrid.innerHTML = newsItems.map((article, index) => `
             <article class="news-card" data-animate>
                 <div class="news-thumb">
-                    <img src="${article.image}" alt="${article.title}" loading="lazy">
+                    <img src="${article.image}" alt="${article.title}" loading="lazy" onerror="this.onerror=null;this.src='assets/img/brand/banner-img10.png';">
                 </div>
                 <div class="news-body">
                     <span class="news-date">${article.date}</span>

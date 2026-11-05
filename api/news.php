@@ -101,7 +101,7 @@ foreach ($items as $item) {
                 $date = filemtime($docFile);
             }
             if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']) && !$imgFile) {
-                $imgFile = 'noticias/' . $item . '/' . $sf;
+                $imgFile = 'noticias/' . rawurlencode($item) . '/' . rawurlencode($sf);
             }
         }
         $image = $imgFile ? $imgFile : 'assets/img/brand/banner-img10.png';
@@ -113,9 +113,9 @@ foreach ($items as $item) {
             $date = filemtime($docFile);
             $baseName = pathinfo($item, PATHINFO_FILENAME);
             // Buscar imagen asociada con el mismo nombre base
-            foreach (['jpg', 'jpeg', 'png', 'webp', 'gif'] as $imgExt) {
+            foreach (['jpg', 'jpeg', 'png', 'webp', 'gif', 'JPG', 'JPEG', 'PNG', 'WEBP'] as $imgExt) {
                 if (file_exists($noticiasDir . '/' . $baseName . '.' . $imgExt)) {
-                    $image = 'noticias/' . $baseName . '.' . $imgExt;
+                    $image = 'noticias/' . rawurlencode($baseName . '.' . $imgExt);
                     break;
                 }
             }
@@ -170,4 +170,8 @@ usort($articles, function($a, $b) {
     return $b['timestamp'] - $a['timestamp'];
 });
 
-echo json_encode($articles, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+// Persistir copia estática en noticias/news.json para entornos sin PHP (ej. GitHub Pages)
+$jsonOutput = json_encode($articles, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+@file_put_contents($noticiasDir . '/news.json', $jsonOutput);
+
+echo $jsonOutput;

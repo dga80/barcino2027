@@ -758,17 +758,17 @@ header {
 }
 
 .news-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: stretch;
     gap: 2rem;
 }
 
-.news-grid.single-news {
-    grid-template-columns: minmax(0, 420px);
-    justify-content: center;
-}
-
 .news-card {
+    flex: 1 1 320px;
+    max-width: 370px;
+    width: 100%;
     background: var(--card-pink);
     border-radius: 8px;
     overflow: hidden;
@@ -784,16 +784,20 @@ header {
 }
 
 .news-thumb {
+    width: 100%;
     aspect-ratio: 4 / 3;
     overflow: hidden;
     cursor: pointer;
+    background: rgba(0, 0, 0, 0.25);
+    position: relative;
 }
 
 .news-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 15%;
+    object-position: center 20%;
+    display: block;
     transition: transform 0.4s ease;
 }
 
@@ -821,16 +825,29 @@ header {
     font-weight: 600;
     margin-bottom: 0.8rem;
     line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    overflow: clip;
+    min-height: calc(1.25rem * 1.35 * 3);
 }
 
 .news-excerpt {
     font-size: 0.95rem;
     color: var(--text-muted);
     margin-bottom: 1.5rem;
-    flex-grow: 1;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    line-clamp: 3;
+    overflow: clip;
+    min-height: calc(0.95rem * 1.6 * 3);
 }
 
 .btn-read-more {
+    margin-block-start: auto;
     color: var(--accent-gold);
     font-family: var(--font-heading);
     font-size: 0.9rem;
@@ -1377,11 +1394,9 @@ footer {
     .team-info .quote {
         font-size: 14px;
     }
-    .news-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .news-grid.single-news {
-        grid-template-columns: minmax(0, 420px);
+    .news-card {
+        flex: 1 1 280px;
+        max-width: 340px;
     }
     .counter-grid {
         grid-template-columns: 1fr;
@@ -1410,8 +1425,15 @@ footer {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    .news-grid {
-        grid-template-columns: 1fr;
+    .news-card {
+        flex: 1 1 100%;
+        max-width: 400px;
+    }
+    .news-title {
+        min-height: 0;
+    }
+    .news-excerpt {
+        min-height: 0;
     }
     .form-grid {
         grid-template-columns: 1fr;
