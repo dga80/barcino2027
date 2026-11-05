@@ -25,7 +25,8 @@ function parseDocxText($filename) {
         $xmlContent = $zip->getFromName('word/document.xml');
         $zip->close();
         if ($xmlContent !== false) {
-            // Reemplazar saltos de párrafo en Word <w:p> por saltos de línea
+            // Reemplazar saltos de párrafo y saltos de línea manuales en Word (<w:p>, <w:br/>, <w:cr/>)
+            $xmlContent = preg_replace('/<w:(br|cr)\b[^>]*\/?>/i', "\n", $xmlContent);
             $xmlContent = str_replace(['</w:p>', '</w:tr>'], "\n\n", $xmlContent);
             $xmlContent = str_replace('</w:r>', '', $xmlContent);
             $content = strip_tags($xmlContent);
@@ -33,6 +34,17 @@ function parseDocxText($filename) {
         }
     }
     return $content;
+}
+
+function parseDateFromName($str, $fallbackTimestamp) {
+    // Busca fechas tipo DD_MM_YYYY o DD-MM-YYYY en el nombre del archivo o carpeta
+    if (preg_match('/\b(\d{2})[_\-](\d{2})[_\-](\d{4})\b/', $str, $m)) {
+        $ts = mktime(12, 0, 0, (int)$m[2], (int)$m[1], (int)$m[3]);
+        if ($ts !== false) {
+            return $ts;
+        }
+    }
+    return $fallbackTimestamp;
 }
 
 function parseRtfText($filename) {
@@ -137,6 +149,8 @@ foreach ($items as $item) {
             $title = array_shift($cleanLines);
             $body = implode("\n\n", $cleanLines);
             $excerpt = count($cleanLines) > 0 ? (mb_substr($cleanLines[0], 0, 140) . (mb_strlen($cleanLines[0]) > 140 ? '...' : '')) : '';
+
+            $date = parseDateFromName($item . ' ' . basename($docFile), $date);
 
             $articles[] = [
                 'id' => md5($item),

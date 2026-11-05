@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ==========================================================================
-       4. NEWS SECTION (AUTOGESTIONABLE API)
+       4. NEWS SECTION (AUTOGESTIONABLE API + STATIC/GITHUB PAGES FALLBACK)
        ========================================================================== */
     const newsGrid = document.getElementById('newsGrid');
     const newsModal = document.getElementById('newsModal');
@@ -185,74 +185,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const newsModalTitle = document.getElementById('newsModalTitle');
     const newsModalContent = document.getElementById('newsModalContent');
 
+    const FALLBACK_NEWS = [
+        {
+            id: "654e2da93b06a6b55e877859a7f5570f",
+            title: "A Great Honour and Privilege: Joining The Worshipful Company of Butchers",
+            excerpt: "I am delighted and honoured to share that I have been accepted as a member of The Worshipful Company of Butchers in London.",
+            content: "I am delighted and honoured to share that I have been accepted as a member of The Worshipful Company of Butchers in London.\n\nJoining such a historic institution, with centuries of tradition and a strong connection to the meat and food industry, is a great privilege for me both personally and professionally.\n\nI would like to express my sincere thanks to everyone who has supported and encouraged me throughout this process, especially Paul, Miles and Carla, for their kindness, guidance and assistance.\n\nI look forward to becoming part of this distinguished community, contributing to its traditions and values, and building new relationships with fellow members.\n\nA very special moment and a great honour.\n\nThank you, The Worshipful Company of Butchers, for this opportunity.",
+            image: "noticias/noticia_06_09_2026/cabecera.png",
+            date: "06 Sep 2026",
+            timestamp: 1788696000
+        }
+    ];
+
+    function renderNewsItems(newsItems) {
+        if (!newsItems || newsItems.length === 0) {
+            newsGrid.classList.remove('single-news');
+            newsGrid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">
+                    <p>No recent news articles published yet. Upload your text and photo to the /noticias folder.</p>
+                </div>
+            `;
+            return;
+        }
+
+        newsGrid.classList.toggle('single-news', newsItems.length === 1);
+
+        newsGrid.innerHTML = newsItems.map((article, index) => `
+            <article class="news-card" data-animate>
+                <div class="news-thumb">
+                    <img src="${article.image}" alt="${article.title}" loading="lazy">
+                </div>
+                <div class="news-body">
+                    <span class="news-date">${article.date}</span>
+                    <h3 class="news-title">${article.title}</h3>
+                    <p class="news-excerpt">${article.excerpt}</p>
+                    <button class="btn-read-more" data-index="${index}">
+                        Read More <i class="las la-arrow-right"></i>
+                    </button>
+                </div>
+            </article>
+        `).join('');
+
+        newsGrid.querySelectorAll('.btn-read-more, .news-thumb').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const card = e.currentTarget.closest('.news-card');
+                const btn = card ? card.querySelector('.btn-read-more') : e.currentTarget;
+                const idx = parseInt(btn.getAttribute('data-index'), 10);
+                const article = newsItems[idx];
+                if (!article) return;
+                newsModalImg.src = article.image;
+                newsModalImg.alt = article.title;
+                newsModalDate.textContent = article.date;
+                newsModalTitle.textContent = article.title;
+                newsModalContent.textContent = article.content;
+                newsModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        observeAnimations();
+    }
+
     async function loadNews() {
         if (!newsGrid) return;
         try {
             const res = await fetch('api/news.php');
-            if (!res.ok) throw new Error('API not available');
-            const newsItems = await res.json();
-
-            if (newsItems.length === 0) {
-                newsGrid.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 2rem;">
-                        <p>No recent news articles published yet. Upload your text and photo to the /noticias folder.</p>
-                    </div>
-                `;
-                return;
-            }
-
-            newsGrid.innerHTML = newsItems.map((article, index) => `
-                <article class="news-card" data-animate>
-                    <div class="news-thumb">
-                        <img src="${article.image}" alt="${article.title}" loading="lazy">
-                    </div>
-                    <div class="news-body">
-                        <span class="news-date">${article.date}</span>
-                        <h3 class="news-title">${article.title}</h3>
-                        <p class="news-excerpt">${article.excerpt}</p>
-                        <button class="btn-read-more" data-index="${index}">
-                            Read More <i class="las la-arrow-right"></i>
-                        </button>
-                    </div>
-                </article>
-            `).join('');
-
-            // Open News Modal
-            newsGrid.querySelectorAll('.btn-read-more').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const idx = parseInt(btn.getAttribute('data-index'), 10);
-                    const article = newsItems[idx];
-                    newsModalImg.src = article.image;
-                    newsModalDate.textContent = article.date;
-                    newsModalTitle.textContent = article.title;
-                    newsModalContent.textContent = article.content;
-                    newsModal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                });
-            });
-
-            // Re-trigger animate observer on newly injected news cards
-            observeAnimations();
-
+            if (!res.ok) throw new Error('PHP API not available');
+            const text = await res.text();
+            if (text.trim().startsWith('<?php')) throw new Error('PHP not executed on static host');
+            const newsItems = JSON.parse(text);
+            renderNewsItems(newsItems);
         } catch (e) {
-            console.warn('News API fetch fallback:', e);
-            // Si la llamada falla (por ejemplo abriendo en local directo por file://), mostrar tarjeta de bienvenida
-            newsGrid.innerHTML = `
-                <article class="news-card" data-animate>
-                    <div class="news-thumb">
-                        <img src="assets/img/brand/banner-img10.png" alt="Barcino Meats" loading="lazy">
-                    </div>
-                    <div class="news-body">
-                        <span class="news-date">October 2026</span>
-                        <h3 class="news-title">Expanding Our Quality Butchery Distribution</h3>
-                        <p class="news-excerpt">Barcino Meats is proud to announce the continued expansion of our premium Spanish meat distribution network throughout the UK and Ireland...</p>
-                        <button class="btn-read-more" onclick="alert('Full article available when deployed with PHP support.')">
-                            Read More <i class="las la-arrow-right"></i>
-                        </button>
-                    </div>
-                </article>
-            `;
-            observeAnimations();
+            try {
+                const resJson = await fetch('noticias/news.json');
+                if (!resJson.ok) throw new Error('Static JSON not available');
+                const newsItems = await resJson.json();
+                renderNewsItems(newsItems);
+            } catch (e2) {
+                renderNewsItems(FALLBACK_NEWS);
+            }
         }
     }
 

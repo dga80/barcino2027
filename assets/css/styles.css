@@ -763,6 +763,11 @@ header {
     gap: 2rem;
 }
 
+.news-grid.single-news {
+    grid-template-columns: minmax(0, 420px);
+    justify-content: center;
+}
+
 .news-card {
     background: var(--card-pink);
     border-radius: 8px;
@@ -779,14 +784,16 @@ header {
 }
 
 .news-thumb {
-    height: 220px;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .news-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 15%;
     transition: transform 0.4s ease;
 }
 
@@ -1109,19 +1116,27 @@ footer {
 
 .modal-close {
     position: absolute;
-    top: 1.2rem;
-    right: 1.5rem;
-    background: none;
-    border: none;
-    font-size: 2rem;
+    top: 1rem;
+    right: 1rem;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(24, 26, 31, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    font-size: 1.5rem;
     color: #ffffff;
     cursor: pointer;
     line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
     transition: var(--transition);
 }
 
 .modal-close:hover {
-    color: var(--accent-gold);
+    background: var(--accent-gold);
+    color: var(--dark-bg);
 }
 
 /* Product Modal Slider */
@@ -1189,8 +1204,9 @@ footer {
 /* News Modal */
 .news-modal-img {
     width: 100%;
-    max-height: 380px;
-    object-fit: cover;
+    max-height: 460px;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.25);
     border-radius: 8px;
     margin-bottom: 1.5rem;
 }
@@ -1364,6 +1380,9 @@ footer {
     .news-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .news-grid.single-news {
+        grid-template-columns: minmax(0, 420px);
+    }
     .counter-grid {
         grid-template-columns: 1fr;
         text-align: center;
@@ -1402,6 +1421,14 @@ footer {
     }
     .modal-content {
         padding: 1.8rem 1.2rem;
+    }
+    .news-modal-title {
+        font-size: 1.45rem;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+    }
+    .news-modal-img {
+        max-height: 300px;
     }
 }
 
