@@ -1270,9 +1270,11 @@ footer {
         height: 60vh;
         height: 60dvh;
         min-height: 440px;
+        margin-bottom: calc(35vh - 185px);
+        margin-bottom: calc(35dvh - 185px);
         background-image: url('../img/brand/banner-img10.png');
-        background-position: -400px -50px;
-        background-size: 250%;
+        background-position: 62% -50px;
+        background-size: 900px auto;
         padding: 0 0.25rem;
         display: flex;
         align-items: center;
