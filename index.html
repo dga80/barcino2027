@@ -172,7 +172,7 @@
                 <!-- Member 1 -->
                 <div class="team-card" data-animate>
                     <div class="team-img">
-                        <img src="assets/img/team/team-img-1b.jpg" alt="Pedro Pérez">
+                        <img src="assets/img/team/retratoweb.png" alt="Pedro Pérez">
                     </div>
                     <div class="team-info">
                         <h3>Pedro Pérez</h3>
@@ -199,6 +199,9 @@
             <div class="products-intro" data-animate>
                 <p>Barcino Meats is committed to providing top-quality meat products, ensuring high welfare standards for the animals. Our pork selection, including renowned products like Jamón Ibérico and Spanish chorizo, is sourced from the best suppliers. We offer both freshly butchered and frozen options. Our beef range, known for its traditional cuts and innovative selections, is highly sought after by loyal customers. Additionally, we have reliable partnerships with farmers in Spain and South Africa to ensure a consistent supply of premium turkey, available year-round. Barcino Meats also sources chickens from Spain and Chile, supporting the growth of our suppliers while delivering exceptional products to our customers. For more details on our full product range, call us at <b>+34 681 254 207</b></p>
             </div>
+
+            <!-- Category Filter Bar -->
+            <div class="products-categories" id="productsCategories" role="group" aria-label="Product categories" data-animate></div>
 
             <!-- Dynamic Grid injected via products-data.js -->
             <div class="products-grid" id="productsGrid"></div>
@@ -337,15 +340,16 @@
     </button>
 
     <!-- Product Slider Modal -->
-    <div class="modal-overlay" id="productModal">
+    <div class="modal-overlay" id="productModal" role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
         <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">&times;</button>
+            <button type="button" class="modal-close" aria-label="Close modal">&times;</button>
             <h3 id="productModalTitle" style="text-transform: uppercase; color: var(--accent-gold); font-size: 1.4rem;"></h3>
+            <p id="productModalDesc" class="product-modal-desc"></p>
             
             <div class="product-slider">
                 <div class="slider-track" id="sliderTrack"></div>
-                <button class="slider-btn prev" id="sliderPrev" aria-label="Previous slide"><i class="las la-angle-left"></i></button>
-                <button class="slider-btn next" id="sliderNext" aria-label="Next slide"><i class="las la-angle-right"></i></button>
+                <button type="button" class="slider-btn prev" id="sliderPrev" aria-label="Previous slide"><i class="las la-angle-left" aria-hidden="true"></i></button>
+                <button type="button" class="slider-btn next" id="sliderNext" aria-label="Next slide"><i class="las la-angle-right" aria-hidden="true"></i></button>
             </div>
             <div class="slider-counter" id="sliderCounter"></div>
         </div>

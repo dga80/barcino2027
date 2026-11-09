@@ -1,28 +1,81 @@
 /**
+ * Categorías principales solicitadas por el cliente
+ */
+const PRODUCT_CATEGORIES = [
+    {
+        id: "pork",
+        label: "Pork",
+        description: "Freshly butchered and frozen Spanish & European pork cuts sourced from accredited suppliers."
+    },
+    {
+        id: "young-bull",
+        label: "Young Bull",
+        description: "Premium young bull cuts selected for consistent marbling, tenderness and wholesale grading."
+    },
+    {
+        id: "turkey",
+        label: "Turkey",
+        description: "Year-round supply of whole and portioned premium turkey from trusted partner farms."
+    },
+    {
+        id: "mutton",
+        label: "Mutton",
+        description: "High-welfare ovine and mutton cuts tailored for manufacturing, wholesale and foodservice."
+    },
+    {
+        id: "otm-beef",
+        label: "OTM Beef",
+        description: "Over Thirty Months (OTM) beef cuts, traditional primals and custom processing grades."
+    },
+    {
+        id: "pulled-meats",
+        label: "Pulled Meats",
+        description: "Slow-cooked pulled meat selections prepared for retail, hospitality and food manufacturing."
+    },
+    {
+        id: "piglets",
+        label: "Piglets",
+        description: "Authentic Spanish suckling piglets (cochinillo) available whole or portioned."
+    },
+    {
+        id: "cooked-ribs",
+        label: "Cooked Ribs",
+        description: "Tender, slow-cooked ribs prepared to specification for quick finishing and consistent quality."
+    }
+];
+
+/**
  * Catálogo de productos de Barcino Meats
- * Fácil de mantener y ampliar. Cada elemento tiene:
+ * Cada elemento tiene:
  * - id: Identificador único
+ * - category: ID de la categoría (pork, young-bull, turkey, mutton, otm-beef, pulled-meats, piglets, cooked-ribs)
  * - title: Nombre del corte / producto
- * - thumb: Imagen principal que se muestra en la cuadrícula
- * - gallery: Lista de fotos en alta resolución para el modal / slider
+ * - description: Breve descripción visible debajo de la miniatura
+ * - thumb: Foto real en miniatura que se muestra directamente en la cuadrícula
+ * - gallery: Lista de fotos reales en alta resolución para ampliar y hacer slide en el modal
  */
 const PRODUCTS = [
     {
         id: "belly-bone-in-rind-on",
+        category: "pork",
         title: "Belly Bone in Rind On",
-        thumb: "assets/img/products/pork/01_bellybone/G_bellyBoneRindOn.jpg",
+        description: "Bone-in pork belly with skin on · Fresh & Frozen",
+        thumb: "assets/img/products/pork/01_bellybone/bellyBoneRindOn.jpg",
         gallery: [
             "assets/img/products/pork/01_bellybone/bellyBoneRindOn.jpg",
             "assets/img/products/pork/01_bellybone/bellyBoneRindOn2.jpg",
             "assets/img/products/pork/01_bellybone/bellyBoneRindOn3.jpg",
+            "assets/img/products/pork/01_bellybone/bellyBoneRindOn4.jpg",
             "assets/img/products/pork/01_bellybone/bellyBoneRindOn5.jpg",
             "assets/img/products/pork/01_bellybone/bellyBoneRindOn6.jpg"
         ]
     },
     {
         id: "boneless-collar",
+        category: "pork",
         title: "Boneless Collar",
-        thumb: "assets/img/products/pork/02_boneless/G_bonelesscollar.jpg",
+        description: "Trimmed boneless pork collar · Fresh & Frozen",
+        thumb: "assets/img/products/pork/02_boneless/bonelesscollar.jpg",
         gallery: [
             "assets/img/products/pork/02_boneless/bonelesscollar.jpg",
             "assets/img/products/pork/02_boneless/bonelesscollar2.jpg",
@@ -31,8 +84,10 @@ const PRODUCTS = [
     },
     {
         id: "boneless-pork-belly-without-skin",
+        category: "pork",
         title: "Boneless Pork Belly Without Skin",
-        thumb: "assets/img/products/pork/03_bonelessPorkBellyWithoutSkin/G_bonelessPorkBellyWithoutSkin.jpg",
+        description: "Rindless, boneless pork belly cut · Fresh & Frozen",
+        thumb: "assets/img/products/pork/03_bonelessPorkBellyWithoutSkin/bonelessPorkBellyWithoutSkin-1.jpg",
         gallery: [
             "assets/img/products/pork/03_bonelessPorkBellyWithoutSkin/bonelessPorkBellyWithoutSkin-1.jpg",
             "assets/img/products/pork/03_bonelessPorkBellyWithoutSkin/bonelessPorkBellyWithoutSkin-2.jpg",
@@ -41,8 +96,10 @@ const PRODUCTS = [
     },
     {
         id: "slipper",
-        title: "Slipper",
-        thumb: "assets/img/products/pork/04_boomerang/G_slipper.jpg",
+        category: "pork",
+        title: "Slipper / Boomerang",
+        description: "Specialty pork cut trimmed to specification",
+        thumb: "assets/img/products/pork/04_boomerang/boomerang.jpg",
         gallery: [
             "assets/img/products/pork/04_boomerang/boomerang.jpg",
             "assets/img/products/pork/04_boomerang/boomerang2.jpg"
@@ -50,8 +107,10 @@ const PRODUCTS = [
     },
     {
         id: "ham-4d-tunnel-boned-with-fat-cover",
+        category: "pork",
         title: "Ham 4D Tunnel Boned With Fat Cover",
-        thumb: "assets/img/products/pork/05_ham4d/G_ham4dTunnelBonnedWithFatCover.jpg",
+        description: "4D tunnel-boned pork leg with external fat cover",
+        thumb: "assets/img/products/pork/05_ham4d/ham4dtunnelbonedwithfatcover-1.jpg",
         gallery: [
             "assets/img/products/pork/05_ham4d/ham4dtunnelbonedwithfatcover-1.jpg",
             "assets/img/products/pork/05_ham4d/ham4dtunnelbonedwithfatcover-4.jpg",
@@ -60,8 +119,10 @@ const PRODUCTS = [
     },
     {
         id: "horse-shoe",
+        category: "pork",
         title: "Horse Shoe",
-        thumb: "assets/img/products/pork/06_horseshoe/G_horseshoe.jpg",
+        description: "Horseshoe gammon / pork leg cut · Export grade",
+        thumb: "assets/img/products/pork/06_horseshoe/horseshoe-1.jpg",
         gallery: [
             "assets/img/products/pork/06_horseshoe/horseshoe-1.jpg",
             "assets/img/products/pork/06_horseshoe/horseshoe-2.jpg",
@@ -70,8 +131,10 @@ const PRODUCTS = [
     },
     {
         id: "loin-rindless",
+        category: "pork",
         title: "Loin Rindless",
-        thumb: "assets/img/products/pork/07_loinRindless/G_loinrindless.jpg",
+        description: "Boneless, skinless pork loin primal cut",
+        thumb: "assets/img/products/pork/07_loinRindless/loinrindless-1.jpg",
         gallery: [
             "assets/img/products/pork/07_loinRindless/loinrindless-1.jpg",
             "assets/img/products/pork/07_loinRindless/loinrindless-2.jpg",
@@ -80,8 +143,10 @@ const PRODUCTS = [
     },
     {
         id: "3d-shoulder",
-        title: "3D Shoulder",
-        thumb: "assets/img/products/pork/08_pala4d/G_3DShoulder.jpg",
+        category: "pork",
+        title: "3D Shoulder (Bone-in With Fat)",
+        description: "Pork shoulder cut with fat cover · Fresh & Frozen",
+        thumb: "assets/img/products/pork/08_pala4d/bone-inPorkShoulderWithFat-1.jpg",
         gallery: [
             "assets/img/products/pork/08_pala4d/bone-inPorkShoulderWithFat-1.jpg",
             "assets/img/products/pork/08_pala4d/bone-inPorkShoulderWithFat-2.jpg",
@@ -89,9 +154,11 @@ const PRODUCTS = [
         ]
     },
     {
-        id: "ham-4d-tunnel-boned",
-        title: "Ham 4D Tunnel Boned",
-        thumb: "assets/img/products/pork/10_porkLoinWithoutskin/G_Ham4DTunnelBonned.jpg",
+        id: "pork-loin-without-skin",
+        category: "pork",
+        title: "Pork Loin Without Skin",
+        description: "Trimmed skinless pork loin · Custom specification",
+        thumb: "assets/img/products/pork/10_porkLoinWithoutskin/porkLoinWithoutSkin-1.jpg",
         gallery: [
             "assets/img/products/pork/10_porkLoinWithoutskin/porkLoinWithoutSkin-1.jpg",
             "assets/img/products/pork/10_porkLoinWithoutskin/porkLoinWithoutSkin-2.jpg",
@@ -99,9 +166,11 @@ const PRODUCTS = [
         ]
     },
     {
-        id: "ham-4d-tunnel-boned-in-rind-on",
-        title: "Ham 4D Tunnel Boned in Rind On",
-        thumb: "assets/img/products/pork/11_porkLoinWithSkin/G_Ham4DTunnelBonnedInRindOn.jpg",
+        id: "pork-loin-with-skin",
+        category: "pork",
+        title: "Pork Loin With Skin",
+        description: "Rind-on pork loin primal · Fresh & Frozen",
+        thumb: "assets/img/products/pork/11_porkLoinWithSkin/porkLoinWithSkin-1.jpg",
         gallery: [
             "assets/img/products/pork/11_porkLoinWithSkin/porkLoinWithSkin-1.jpg",
             "assets/img/products/pork/11_porkLoinWithSkin/porkLoinWithSkin-2.jpg",
@@ -109,9 +178,22 @@ const PRODUCTS = [
         ]
     },
     {
+        id: "pork-neck",
+        category: "pork",
+        title: "Pork Neck",
+        description: "Well-marbled pork neck primal cut",
+        thumb: "assets/img/products/pork/12_porkneck/porkneck.jpg",
+        gallery: [
+            "assets/img/products/pork/12_porkneck/porkneck.jpg",
+            "assets/img/products/pork/12_porkneck/porkneck2.jpg"
+        ]
+    },
+    {
         id: "rind-on-back",
+        category: "pork",
         title: "Rind On Back",
-        thumb: "assets/img/products/pork/13_rindOnBack/G_rindOnBack.jpg",
+        description: "Pork back cut with skin on · Export quality",
+        thumb: "assets/img/products/pork/13_rindOnBack/rindOnBack-1.jpg",
         gallery: [
             "assets/img/products/pork/13_rindOnBack/rindOnBack-1.jpg",
             "assets/img/products/pork/13_rindOnBack/rindOnBack-2.jpg",
@@ -120,8 +202,10 @@ const PRODUCTS = [
     },
     {
         id: "skinless-back",
+        category: "pork",
         title: "Skinless Back",
-        thumb: "assets/img/products/pork/14_skinless back/G_skinless-back.jpg",
+        description: "Trimmed rindless pork back cut",
+        thumb: "assets/img/products/pork/14_skinless back/skinless-back_1.jpg",
         gallery: [
             "assets/img/products/pork/14_skinless back/skinless-back_1.jpg",
             "assets/img/products/pork/14_skinless back/skinless-back_2.jpg",
@@ -130,8 +214,10 @@ const PRODUCTS = [
     },
     {
         id: "tender-loin",
+        category: "pork",
         title: "Tender Loin",
-        thumb: "assets/img/products/pork/15_tenderloin/G_tenderloin.jpg",
+        description: "Whole trimmed pork tenderloin fillet",
+        thumb: "assets/img/products/pork/15_tenderloin/tenderloin-2.jpg",
         gallery: [
             "assets/img/products/pork/15_tenderloin/tenderloin-2.jpg",
             "assets/img/products/pork/15_tenderloin/tenderloin-3.jpg",

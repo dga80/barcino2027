@@ -99,51 +99,122 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ==========================================================================
        3. DYNAMIC PRODUCTS CATALOG & MODAL SLIDER
        ========================================================================== */
+    const productsCategories = document.getElementById('productsCategories');
     const productsGrid = document.getElementById('productsGrid');
     const productModal = document.getElementById('productModal');
     const productModalTitle = document.getElementById('productModalTitle');
+    const productModalDesc = document.getElementById('productModalDesc');
     const sliderTrack = document.getElementById('sliderTrack');
     const sliderCounter = document.getElementById('sliderCounter');
     const sliderPrev = document.getElementById('sliderPrev');
     const sliderNext = document.getElementById('sliderNext');
     let currentSlide = 0;
     let totalSlides = 0;
+    let activeCategory = 'pork';
+    let lastFocusedTrigger = null;
 
-    if (productsGrid && typeof PRODUCTS !== 'undefined') {
-        productsGrid.innerHTML = PRODUCTS.map((prod, index) => `
-            <div class="product-item" data-index="${index}" data-animate>
-                <img src="${prod.thumb}" alt="${prod.title}" loading="lazy">
-                <div class="product-overlay">
-                    <div class="product-frame">
-                        <h4>${prod.title}</h4>
-                    </div>
+    function renderCategoryFilters() {
+        if (!productsCategories || typeof PRODUCT_CATEGORIES === 'undefined') return;
+
+        productsCategories.innerHTML = PRODUCT_CATEGORIES.map(cat => {
+            const isActive = cat.id === activeCategory;
+            const count = typeof PRODUCTS !== 'undefined'
+                ? PRODUCTS.filter(p => p.category === cat.id).length
+                : 0;
+            return `
+                <button type="button" class="category-pill ${isActive ? 'active' : ''}" data-category="${cat.id}" aria-pressed="${isActive}">
+                    <span class="category-pill-label">${cat.label}</span>
+                    ${count > 0 ? `<span class="category-pill-count">${count}</span>` : ''}
+                </button>
+            `;
+        }).join('');
+
+        productsCategories.querySelectorAll('.category-pill').forEach(btn => {
+            btn.addEventListener('click', () => {
+                activeCategory = btn.getAttribute('data-category');
+                renderCategoryFilters();
+                renderProductsGrid();
+            });
+        });
+    }
+
+    function renderProductsGrid() {
+        if (!productsGrid || typeof PRODUCTS === 'undefined') return;
+
+        const filtered = PRODUCTS
+            .map((prod, originalIndex) => ({ ...prod, originalIndex }))
+            .filter(prod => prod.category === activeCategory);
+
+        if (filtered.length === 0) {
+            const catObj = (typeof PRODUCT_CATEGORIES !== 'undefined'
+                ? PRODUCT_CATEGORIES.find(c => c.id === activeCategory)
+                : null) || { label: activeCategory, description: '' };
+
+            productsGrid.innerHTML = `
+                <div class="product-category-empty">
+                    <i class="las la-camera product-empty-icon" aria-hidden="true"></i>
+                    <h3>${catObj.label}</h3>
+                    <p class="product-empty-desc">${catObj.description}</p>
+                    <p class="product-empty-note">Product gallery images for <strong>${catObj.label}</strong> will be available soon. Contact our team directly for full cut specifications, availability and wholesale pricing.</p>
+                    <a href="#contact" class="btn-outline-gold">Request Specifications</a>
                 </div>
-            </div>
-        `).join('');
+            `;
+            return;
+        }
 
-        // Modal triggers
+        productsGrid.innerHTML = filtered.map(prod => {
+            const photoCount = prod.gallery ? prod.gallery.length : 1;
+            return `
+                <button type="button" class="product-item" data-index="${prod.originalIndex}">
+                    <div class="product-thumb">
+                        <img src="${prod.thumb}" alt="${prod.title}" loading="lazy">
+                        <span class="product-photo-badge">
+                            <i class="las la-search-plus" aria-hidden="true"></i>
+                            ${photoCount} ${photoCount === 1 ? 'photo' : 'photos'}
+                        </span>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${prod.title}</h3>
+                        <p class="product-desc">${prod.description || 'Click to enlarge & view gallery'}</p>
+                    </div>
+                </button>
+            `;
+        }).join('');
+
         productsGrid.querySelectorAll('.product-item').forEach(item => {
             item.addEventListener('click', () => {
+                lastFocusedTrigger = item;
                 const index = parseInt(item.getAttribute('data-index'), 10);
                 openProductModal(PRODUCTS[index]);
             });
         });
     }
 
+    if (productsGrid && typeof PRODUCTS !== 'undefined') {
+        renderCategoryFilters();
+        renderProductsGrid();
+    }
+
     function openProductModal(prod) {
         productModalTitle.textContent = prod.title;
+        if (productModalDesc) {
+            productModalDesc.textContent = prod.description || '';
+        }
         currentSlide = 0;
         totalSlides = prod.gallery.length;
 
-        sliderTrack.innerHTML = prod.gallery.map(imgSrc => `
+        sliderTrack.innerHTML = prod.gallery.map((imgSrc, idx) => `
             <div class="slider-slide">
-                <img src="${imgSrc}" alt="${prod.title}">
+                <img src="${imgSrc}" alt="${prod.title} - view ${idx + 1} of ${prod.gallery.length}">
             </div>
         `).join('');
 
         updateSlider();
         productModal.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        const closeBtn = productModal.querySelector('.modal-close');
+        if (closeBtn) closeBtn.focus();
     }
 
     function updateSlider() {
@@ -165,14 +236,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function closeAllModals() {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+        document.body.style.overflow = '';
+        if (lastFocusedTrigger) {
+            lastFocusedTrigger.focus();
+            lastFocusedTrigger = null;
+        }
+    }
+
     // Modal Close
     document.querySelectorAll('.modal-close, .modal-overlay').forEach(closer => {
         closer.addEventListener('click', (e) => {
             if (e.target === closer || closer.classList.contains('modal-close')) {
-                document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
-                document.body.style.overflow = '';
+                closeAllModals();
             }
         });
+    });
+
+    // Keyboard navigation for Product Slider Modal
+    document.addEventListener('keydown', (e) => {
+        if (productModal && productModal.classList.contains('active')) {
+            if (e.key === 'Escape') {
+                closeAllModals();
+            } else if (e.key === 'ArrowLeft' && totalSlides > 1) {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            } else if (e.key === 'ArrowRight' && totalSlides > 1) {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }
+        } else if (e.key === 'Escape') {
+            closeAllModals();
+        }
     });
 
     /* ==========================================================================
