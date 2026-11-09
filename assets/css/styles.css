@@ -1311,12 +1311,21 @@ footer {
 }
 
 /* Product Modal Slider */
+#productModal .modal-content {
+    max-width: min(760px, calc((88vh - 140px) * 1.4158 + 3.5rem));
+    max-width: min(760px, calc((88dvh - 140px) * 1.4158 + 3.5rem));
+    max-height: 92vh;
+    max-height: 92dvh;
+    overflow: hidden;
+    padding: 1.5rem 1.75rem 1.15rem;
+}
+
 .product-slider {
     position: relative;
-    margin-top: 1.5rem;
+    margin-top: 0.85rem;
     border-radius: 8px;
-    overflow: hidden;
-    background: #000;
+    overflow: clip;
+    background: transparent;
 }
 
 .slider-track {
@@ -1329,13 +1338,16 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    max-height: 520px;
 }
 
 .slider-slide img {
-    max-height: 520px;
     width: 100%;
-    object-fit: contain;
+    height: auto;
+    max-height: calc(88vh - 140px);
+    max-height: calc(88dvh - 140px);
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
 }
 
 .slider-btn {
@@ -1366,7 +1378,7 @@ footer {
 
 .slider-counter {
     text-align: center;
-    margin-top: 1rem;
+    margin-top: 0.75rem;
     font-size: 0.9rem;
     color: var(--accent-gold);
     font-weight: 600;
